@@ -164,6 +164,7 @@ namespace BenfordsDisk
             foreach (FileInfo file in directory.GetFiles())
             {
                 digit = int.Parse(file.Length.ToString().Substring(0, 1));
+                // having 0s in the mix makes no sense mathematically, though apparently 0-byte files technically exist
                 if (digit > 0)
                 {
                     counts[digit - 1]++;
@@ -196,11 +197,6 @@ namespace BenfordsDisk
 
             foreach (long digit in filesizes)
             {
-                if (digit < 1)
-                {   // having 0s in the mix makes no sense mathematically, though apparently 0-byte files technically exist
-                    continue;
-                }
-
                 // beware off-by-one errors. digit value 1 is counted into array element 0
                 counts[digit - 1]++;
             }
@@ -239,7 +235,11 @@ namespace BenfordsDisk
             // accumulate the sizes of the files in this dir
             foreach (FileInfo file in directory.GetFiles())
             {
-                acummulator.Add(file.Length);
+                // having 0s in the mix makes no sense mathematically, though apparently 0-byte files technically exist
+                if (file.Length > 0)
+                {
+                    acummulator.Add(file.Length);
+                }
             }
 
             return;
