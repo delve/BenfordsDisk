@@ -66,7 +66,7 @@ namespace BenfordsDisk
                  *   we'll use a recursive function to generate the needed info
                  *   */
                 List<long> filesizes = new List<long>();
-                RecurseDir(new DirectoryInfo(systemDrives[driveChoice - 1].Name), filesizes);
+                RecurseDirWithList(new DirectoryInfo(systemDrives[driveChoice - 1].Name), filesizes);
                 Console.WriteLine("Found {0} files.", filesizes.Count);
                 for (int i = 0; i < filesizes.Count; i++)
                 {
@@ -74,7 +74,6 @@ namespace BenfordsDisk
                 }
 
                 Console.WriteLine("The raw digits: {0}", string.Join<long>(" ", filesizes));
-                filesizes.Sort();
                 int[] counts = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 double[] percents = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 foreach (long digit in filesizes)
@@ -108,7 +107,7 @@ namespace BenfordsDisk
         /// </summary>
         /// <param name="directory">The directory context to start from</param>
         /// <param name="acummulator">The list object accumulating all the file sizes</param>
-        public static void RecurseDir(DirectoryInfo directory, List<long> acummulator)
+        public static void RecurseDirWithList(DirectoryInfo directory, List<long> acummulator)
         {
             DirectoryInfo[] subDirs = null;
             /* first try looking for subdirectories. If we fail with any exception (it's likely
@@ -130,7 +129,7 @@ namespace BenfordsDisk
             // walk the subdirs
             foreach (DirectoryInfo dir in subDirs)
             {
-                RecurseDir(dir, acummulator);
+                RecurseDirWithList(dir, acummulator);
             }
 
             // accumulate the sizes of the files in this dir
